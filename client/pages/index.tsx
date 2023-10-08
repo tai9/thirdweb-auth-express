@@ -23,15 +23,17 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div>
-      {isLoggedIn ? (
-        <button onClick={() => logout()}>Logout</button>
-      ) : address ? (
-        <button onClick={() => login()}>Login</button>
-      ) : (
-        <button onClick={() => connect()}>Connect</button>
-      )}
-      <button onClick={getSecret}>Get Secret</button>
+    <div className="flex-col">
+      <div className="flex-row">
+        {isLoggedIn ? (
+          <button onClick={() => logout()}>Logout</button>
+        ) : address ? (
+          <button onClick={() => login()}>Login</button>
+        ) : (
+          <button onClick={() => connect()}>Connect</button>
+        )}
+        <button onClick={getSecret}>Get Secret</button>
+      </div>
 
       <pre>Connected Wallet: {address}</pre>
       <pre>User: {JSON.stringify(user, undefined, 2) || "N/A"}</pre>

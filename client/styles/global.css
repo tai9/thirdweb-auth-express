@@ -1,0 +1,23 @@
+body {
+  padding: 32px;
+}
+
+* {
+  font-size: 18px;
+}
+
+.header {
+  padding: 24px 0;
+  border-bottom: 1px solid;
+}
+
+.flex-row {
+  display: flex;
+  gap: 24px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
