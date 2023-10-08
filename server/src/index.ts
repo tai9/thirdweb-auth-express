@@ -2,11 +2,17 @@ import { ThirdwebAuth } from "@thirdweb-dev/auth/express";
 import { PrivateKeyWallet } from "@thirdweb-dev/auth/evm";
 import { config } from "dotenv";
 import express from "express";
+import cookieParser from "cookie-parser";
+import { getDbConnection } from "./configs/db.config";
 
 config();
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // NOTE: This users map is for demo purposes. Its used to show the power of
 // what you can accomplish with the Auth callbacks. In a production app,
@@ -74,6 +80,9 @@ app.get("/secret", async (req, res) => {
     message: "This is a secret... don't tell anyone.",
   });
 });
+
+// connect DB
+getDbConnection();
 
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
