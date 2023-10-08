@@ -1,3 +1,11 @@
+## Description
+- Authentication
+- Authorization
+- Logging
+- Audit log
+- Proxy
+- TypeORM + Postgresql
+
 ## Getting Started
 
 This example demonstrates how to use thirdweb Auth with an express backend and react frontend.
