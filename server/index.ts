@@ -76,5 +76,5 @@ app.get("/secret", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server listening on port http://localhost:${PORT}`);
 });
