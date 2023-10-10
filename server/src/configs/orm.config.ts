@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { DataSourceOptions } from "typeorm";
+import { User } from "../entities";
 
 const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
@@ -8,10 +9,10 @@ const dataSourceOptions: DataSourceOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DATABASE,
-  synchronize: false,
+  synchronize: true,
   logging: false,
   ssl: process.env.NODE_ENV === "production",
-  entities: ["src/entities/**/*.ts"],
+  entities: [User],
   extra: {
     connectionLimit: 20,
   },
