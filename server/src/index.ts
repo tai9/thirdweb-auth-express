@@ -1,9 +1,12 @@
-import { ThirdwebAuth } from "@thirdweb-dev/auth/express";
 import { PrivateKeyWallet } from "@thirdweb-dev/auth/evm";
+import { ThirdwebAuth } from "@thirdweb-dev/auth/express";
+import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express from "express";
-import cookieParser from "cookie-parser";
 import { getDbConnection } from "./configs/db.config";
+import { User } from "./entities";
+import userRouters from "./routers/user.router";
+import userService from "./services/user.service";
 
 config();
 
@@ -29,14 +32,11 @@ const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
     onLogin: async (address) => {
       // Here we can run side-effects like creating and updating user data
       // whenever a user logs in.
-      if (!users[address]) {
-        users[address] = {
-          created_at: Date.now(),
-          last_login_at: Date.now(),
-          num_log_outs: 0,
-        };
-      } else {
-        users[address].last_login_at = Date.now();
+      const findUser = await userService.getUserByAddress(address);
+      if (!findUser.length) {
+        const user = new User();
+        user.walletAddress = address;
+        await userService.createUser(user);
       }
 
       // We can also provide any session data to store in the user's session.
@@ -44,13 +44,11 @@ const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
     },
     onUser: async (user) => {
       // Here we can run side-effects whenever a user is fetched from the client side
-      if (users[user.address]) {
-        users[user.address].user_last_accessed = Date.now();
-      }
-
+      const userFound = await userService.getUserByAddress(user.address);
+      if (!userFound.length) return null;
       // And we can provide any extra user data to be sent to the client
       // along with the default user object.
-      return users[user.address];
+      return userFound[0].name;
     },
     onLogout: async (user) => {
       // Finally, we can run any side-effects whenever a user logs out.
@@ -80,6 +78,8 @@ app.get("/secret", async (req, res) => {
     message: "This is a secret... don't tell anyone.",
   });
 });
+
+app.use("/users", userRouters);
 
 // connect DB
 getDbConnection();
