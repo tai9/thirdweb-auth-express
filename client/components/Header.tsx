@@ -19,6 +19,12 @@ const Header = () => {
       <Link href={"/users"}>
         <button>Users</button>
       </Link>
+      <Link href={"/roles"}>
+        <button>Roles</button>
+      </Link>
+      <Link href={"/permissions"}>
+        <button>Permissions</button>
+      </Link>
     </div>
   );
 };
