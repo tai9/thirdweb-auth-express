@@ -9,7 +9,7 @@
     "build-ts": "tsc",
     "build": "yarn run build-ts",
     "typeorm": "typeorm-ts-node-esm -d ./src/configs/db.config.ts",
-    "migration-generate": "yarn run typeorm migration:generate",
+    "migration-generate": "typeorm migration:create",
     "migration:up": "yarn run typeorm migration:run",
     "migration:down": "yarn run typeorm migration:revert",
     "entity:create": "typeorm entity:create"
