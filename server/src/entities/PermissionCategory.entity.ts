@@ -1,24 +1,8 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import {
-  BaseEntity,
-  IPermision,
-  IPermisionCategory,
-  Permission,
-  User,
-} from ".";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { IPermisionCategory } from ".";
 
 @Entity({
   name: "permission_categories",
-  orderBy: {
-    createdAt: "DESC",
-  },
 })
 @Index(["name", "type"], { unique: true })
 export class PermissionCategory implements IPermisionCategory {

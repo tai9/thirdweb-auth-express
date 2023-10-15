@@ -4,15 +4,15 @@ export class SeedPermissionCategory1697343936295 implements MigrationInterface {
   readonly permissionTypes = [
     {
       name: "USER",
-      types: ["CREATE", "UPDATED", "READ", "READ_ALL", "DELETE"],
+      types: ["CREATE", "UPDATE", "READ", "READ_ALL", "DELETE"],
     },
     {
       name: "ROLE",
-      types: ["CREATE", "UPDATED", "READ", "READ_ALL", "DELETE"],
+      types: ["CREATE", "UPDATE", "READ", "READ_ALL", "DELETE"],
     },
     {
       name: "NFT",
-      types: ["CREATE", "UPDATED", "READ", "READ_ALL", "DELETE", "BUY", "SELL"],
+      types: ["CREATE", "UPDATE", "READ", "READ_ALL", "DELETE", "BUY", "SELL"],
     },
   ];
 

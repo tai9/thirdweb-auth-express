@@ -7,6 +7,7 @@ import { getDbConnection } from "./configs/db.config";
 import { User } from "./entities";
 import userRouters from "./routers/user.router";
 import userService from "./services/user.service";
+import permissionRouters from "./routers/permission.router";
 
 config();
 
@@ -16,6 +17,10 @@ const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use("/ping", (req, res) => {
+  res.send("ok");
+});
 
 // NOTE: This users map is for demo purposes. Its used to show the power of
 // what you can accomplish with the Auth callbacks. In a production app,
@@ -80,6 +85,7 @@ app.get("/secret", async (req, res) => {
 });
 
 app.use("/users", userRouters);
+app.use("/permissions", permissionRouters);
 
 // connect DB
 getDbConnection();
