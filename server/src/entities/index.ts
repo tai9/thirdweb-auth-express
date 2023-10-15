@@ -7,3 +7,4 @@ export * from "./Permission.entity";
 export * from "./Role.entity";
 export * from "./Nft.entity";
 export * from "./AuditLog.entity";
+export * from "./PermissionCategory.entity";

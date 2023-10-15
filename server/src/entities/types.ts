@@ -5,7 +5,7 @@ export interface IUser extends IBaseEntity {
   walletAddress: string;
 }
 
-export enum PermissionCategory {
+export enum PermissionType {
   READ = "READ",
   DELETE = "DELETE",
   CREATE = "CREATE",
@@ -16,7 +16,7 @@ export interface IPermision extends IBaseEntity {
   name: string;
   status: boolean;
   description?: string;
-  categories: PermissionCategory[];
+  // categories: PermissionType[];
   createdBy: IUser;
 }
 
@@ -40,4 +40,10 @@ export interface IAuditLog extends IBaseEntity {
   description?: string;
   status: string;
   createdBy: IUser;
+}
+
+export interface IPermisionCategory {
+  id: number;
+  name: string;
+  type: string;
 }

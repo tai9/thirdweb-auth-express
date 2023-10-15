@@ -1,6 +1,13 @@
 import "dotenv/config";
 import { DataSourceOptions } from "typeorm";
-import { Permission, User, Role, Nft, AuditLog } from "../entities";
+import {
+  Permission,
+  User,
+  Role,
+  Nft,
+  AuditLog,
+  PermissionCategory,
+} from "../entities";
 
 const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
@@ -12,7 +19,7 @@ const dataSourceOptions: DataSourceOptions = {
   synchronize: true,
   logging: false,
   ssl: process.env.NODE_ENV === "production",
-  entities: [User, Permission, Role, Nft, AuditLog],
+  entities: [User, Permission, Role, Nft, AuditLog, PermissionCategory],
   extra: {
     connectionLimit: 20,
   },

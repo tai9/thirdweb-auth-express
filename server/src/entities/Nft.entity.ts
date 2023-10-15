@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
-import { BaseEntity, INft, PermissionCategory, User } from ".";
+import { BaseEntity, INft, User } from ".";
 
 @Entity({
   name: "nfts",
@@ -23,12 +23,6 @@ export class Nft extends BaseEntity implements INft {
     type: "boolean",
   })
   status: boolean;
-
-  @Column({
-    type: "varchar",
-    array: true,
-  })
-  categories: PermissionCategory[];
 
   @Column({
     type: "varchar",

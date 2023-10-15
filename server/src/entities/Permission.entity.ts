@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { BaseEntity, IPermision, PermissionCategory, User } from ".";
 
 @Entity({
@@ -21,12 +21,18 @@ export class Permission extends BaseEntity implements IPermision {
 
   @Column({
     type: "boolean",
+    nullable: true,
   })
   status: boolean;
 
   @Column({
-    type: "varchar",
+    type: "int",
     array: true,
+    nullable: true,
+  })
+  @OneToMany(() => PermissionCategory, (cate) => cate.id)
+  @JoinColumn({
+    name: "categories",
   })
   categories: PermissionCategory[];
 
