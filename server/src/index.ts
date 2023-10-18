@@ -6,6 +6,7 @@ import { authMiddleware, authRouter } from "./middlewares/auth.middleware";
 import permissionRouters from "./routers/permission.router";
 import roleRouters from "./routers/role.router";
 import userRouters from "./routers/user.router";
+import auditLogRouters from "./routers/auditLog.router";
 
 config();
 
@@ -29,6 +30,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouters);
 app.use("/permissions", permissionRouters);
 app.use("/roles", roleRouters);
+app.use("/audit-logs", auditLogRouters);
 
 // connect DB
 getDbConnection();

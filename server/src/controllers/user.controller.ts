@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import userService from "../services/user.service";
 import { constants } from "http2";
 import { User } from "../entities";
+import auditService from "../services/audit.service";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -30,9 +31,26 @@ const deleteUser = async (req: Request, res: Response) => {
   try {
     const address = req.params.address;
     const users = await userService.deleteUser(address);
-    return res.status(constants.HTTP_STATUS_OK).json(users);
-  } catch (error) {
+    if (users.affected === 0) {
+      throw new Error("User not found");
+    }
+    await auditService.createAuditLog({
+      type: "USER",
+      status: "SUCCESS",
+      description: "Delete user",
+      data: JSON.stringify({ address: address }),
+      // createdBy,
+    });
+    return res.status(constants.HTTP_STATUS_OK).json({ address });
+  } catch (error: any) {
     console.log(error);
+    await auditService.createAuditLog({
+      type: "USER",
+      status: "FAIL",
+      description: "Delete user",
+      data: JSON.stringify({ error: error?.message }),
+      // createdBy,
+    });
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
   }
 };

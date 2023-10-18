@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
-import { BaseEntity, IAuditLog, User } from ".";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { AuditStatus, AuditType, BaseEntity, IAuditLog, User } from ".";
 
 @Entity({
   name: "audit_logs",
@@ -11,12 +11,12 @@ export class AuditLog extends BaseEntity implements IAuditLog {
   @Column({
     type: "varchar",
   })
-  type: string;
+  type: AuditType;
 
   @Column({
     type: "varchar",
   })
-  status: string;
+  status: AuditStatus;
 
   @Column({
     type: "varchar",
@@ -28,9 +28,15 @@ export class AuditLog extends BaseEntity implements IAuditLog {
     type: "varchar",
     nullable: true,
   })
-  @OneToOne(() => User)
+  data: string;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  @ManyToOne(() => User, (u) => u.id)
   @JoinColumn({
     name: "createdBy",
   })
-  createdBy: User;
+  createdBy: number;
 }

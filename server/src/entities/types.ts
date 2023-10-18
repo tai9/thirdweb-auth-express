@@ -36,11 +36,22 @@ export interface INft extends IBaseEntity {
   createdBy: IUser;
 }
 
+export type AuditType =
+  | "USER"
+  | "ROLE"
+  | "NFT"
+  | "PERMISSION"
+  | "LOGIN"
+  | "LOGOUT";
+
+export type AuditStatus = "SUCCESS" | "FAIL";
+
 export interface IAuditLog extends IBaseEntity {
-  type: string;
+  type: AuditType;
   description?: string;
-  status: string;
-  createdBy: IUser;
+  status: AuditStatus;
+  createdBy: number;
+  data?: string;
 }
 
 export interface IPermisionCategory {
