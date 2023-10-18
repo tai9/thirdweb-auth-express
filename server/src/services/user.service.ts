@@ -22,7 +22,7 @@ const getUsers = async () => {
 
 const getUserByAddress = async (address: string) => {
   try {
-    return await userRepository.findBy({
+    return await userRepository.findOneBy({
       walletAddress: address,
     });
   } catch (err) {

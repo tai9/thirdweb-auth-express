@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
-import { BaseEntity, IRole, User } from ".";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { BaseEntity, IRole, Permission, User } from ".";
 
 @Entity({
   name: "roles",
@@ -24,11 +24,20 @@ export class Role extends BaseEntity implements IRole {
   })
   status: boolean;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
   @Column({
     type: "varchar",
     nullable: true,
   })
-  createdBy: User;
+  createdBy: number;
+
+  @OneToMany(() => Permission, (perm) => perm.id)
+  @JoinColumn({ name: "permissionIds" })
+  @Column({
+    type: "int",
+    array: true,
+    nullable: true,
+  })
+  permissionIds: number[];
 }

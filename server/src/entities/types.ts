@@ -24,7 +24,8 @@ export interface IRole extends IBaseEntity {
   name: string;
   description?: string;
   status: boolean;
-  createdBy: IUser;
+  createdBy: number;
+  permissionIds: number[];
 }
 
 export interface INft extends IBaseEntity {

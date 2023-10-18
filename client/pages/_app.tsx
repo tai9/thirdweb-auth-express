@@ -14,6 +14,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN || "",
         authUrl: "/api/auth",
       }}
+      // secretKey={process.env.NEXT_PUBLIC_THIRDWEB_AUTH_SECRET_KEY}
+      // clientId={process.env.NEXT_PUBLIC_THIRDWEB_AUTH_CLIENT_ID}
     >
       <div>
         <Header />
