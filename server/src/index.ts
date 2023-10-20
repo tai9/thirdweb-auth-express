@@ -7,8 +7,23 @@ import permissionRouters from "./routers/permission.router";
 import roleRouters from "./routers/role.router";
 import userRouters from "./routers/user.router";
 import auditLogRouters from "./routers/auditLog.router";
+import Redis from "ioredis";
+import RedisStore from "connect-redis";
+import sessions from "express-session";
 
 config();
+
+const redisClient = new Redis({
+  host: process.env.REDIS_HOST || "127.0.0.1",
+  port: +process.env.REDIS_PORT || 6379,
+  username: process.env.REDIS_USERNAME || "default",
+  password: process.env.REDIS_PASSWORD || "",
+});
+
+const redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "authDapp:",
+});
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -17,8 +32,40 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+const maxAge = 1000 * 60 * 5; //5min
+app.use(
+  sessions({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: maxAge,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+    },
+    store: redisStore,
+  })
+);
+
 app.use("/ping", (req, res) => {
   res.send("ok");
+});
+
+app.get("/get-session", (req, res) => {
+  return res.status(200).json({
+    status: "ok",
+    data: req.session,
+  });
+});
+
+app.get("/set-session", (req, res) => {
+  try {
+    req.session.username = "tailorrrr";
+    return res.send(req.session);
+  } catch (error) {
+    console.error("Error setting session:", error);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 // We add the auth middleware to our app to let us access the user across our API

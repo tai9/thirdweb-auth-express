@@ -23,7 +23,7 @@ const dataSourceOptions: DataSourceOptions = {
   extra: {
     connectionLimit: 20,
   },
-  migrations: ["src/migrations/**/*.ts"],
+  migrations: ["src/migrations/**/*{.ts,.js}"],
   migrationsRun: true,
   migrationsTableName: "custom_migration_table",
 };

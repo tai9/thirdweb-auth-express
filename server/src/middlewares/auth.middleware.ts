@@ -9,7 +9,7 @@ export const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
   // NOTE: All these callbacks are optional! You can delete this section and
   // the Auth flow will still work.
   callbacks: {
-    onLogin: async (address) => {
+    onLogin: async (address, req) => {
       // Here we can run side-effects like creating and updating user data
       // whenever a user logs in.
       let findUser = await userService.getUserByAddress(address);
@@ -20,7 +20,9 @@ export const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
       }
 
       // We can also provide any session data to store in the user's session.
-      return { role: ["admin"], userId: findUser.id };
+      const session = { role: ["admin"], userId: findUser.id };
+      req.session.user = findUser;
+      return session;
     },
     onUser: async (user) => {
       // Here we can run side-effects whenever a user is fetched from the client side
@@ -30,8 +32,11 @@ export const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
       // along with the default user object.
       return userFound.name;
     },
-    onLogout: async (user) => {
+    onLogout: async (user, req) => {
       // Finally, we can run any side-effects whenever a user logs out.
+      return req.session.destroy(() => {
+        return true;
+      });
     },
   },
 });

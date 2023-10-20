@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   const [secret, setSecret] = useState();
 
   const getSecret = async () => {
-    const res = await fetch("/api/secret");
+    const res = await fetch("/api/get-session");
     const data = await res.json();
     setSecret(data.message);
   };
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
         ) : (
           <button onClick={() => connect()}>Connect</button>
         )}
-        <button onClick={getSecret}>Get Secret</button>
+        <button onClick={getSecret}>Get Session</button>
       </div>
 
       <pre>Connected Wallet: {address}</pre>

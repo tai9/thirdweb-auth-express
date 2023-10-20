@@ -1,44 +1,38 @@
 import { Request, Response } from "express";
 import { constants } from "http2";
-import { Role } from "../entities";
-import { getUser } from "../middlewares/auth.middleware";
+import { Role, User } from "../entities";
 import roleService from "../services/role.service";
 import auditService from "../services/audit.service";
 
 const createRole = async (req: Request, res: Response) => {
+  const user = req?.session.user as User;
   try {
-    const user = await getUser(req);
-    const createdBy = user?.session["userId"] || null;
-    try {
-      const role = new Role();
-      role.name = req.body.name;
-      role.description = req.body.description;
-      role.status = req.body.status;
-      role.permissionIds = req.body.permissionIds;
-      role.createdBy = createdBy;
+    const role = new Role();
+    role.name = req.body.name;
+    role.description = req.body.description;
+    role.status = req.body.status;
+    role.permissionIds = req.body.permissionIds;
+    role.createdBy = user?.id;
 
-      const roleCreated = await roleService.createRole(role);
-      await auditService.createAuditLog({
-        type: "ROLE",
-        status: "SUCCESS",
-        description: "Create role",
-        data: JSON.stringify(roleCreated),
-        createdBy,
-      });
-      return res.status(constants.HTTP_STATUS_OK).json(roleCreated);
-    } catch (error) {
-      console.log(error);
-      await auditService.createAuditLog({
-        type: "ROLE",
-        status: "FAIL",
-        description: "Create role",
-        data: JSON.stringify(error),
-        createdBy,
-      });
-      res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
-    }
-  } catch (err) {
-    res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).json();
+    const roleCreated = await roleService.createRole(role);
+    await auditService.createAuditLog({
+      type: "ROLE",
+      status: "SUCCESS",
+      description: "Create role",
+      data: JSON.stringify(roleCreated),
+      createdBy: user?.id,
+    });
+    return res.status(constants.HTTP_STATUS_OK).json(roleCreated);
+  } catch (error) {
+    console.log(error);
+    await auditService.createAuditLog({
+      type: "ROLE",
+      status: "FAIL",
+      description: "Create role",
+      data: JSON.stringify(error),
+      createdBy: user.id,
+    });
+    res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
   }
 };
 
@@ -55,8 +49,7 @@ const getRoles = async (req: Request, res: Response) => {
 const deleteRole = async (req: Request, res: Response) => {
   try {
     const id = +req.params.id;
-    const user = await getUser(req);
-    const createdBy = user?.session["userId"] || null;
+    const user = req?.session.user as User;
     try {
       const { affected } = await roleService.deleteRole(id);
       if (affected === 0) {
@@ -67,7 +60,7 @@ const deleteRole = async (req: Request, res: Response) => {
         status: "SUCCESS",
         description: "Delete role",
         data: JSON.stringify({ roleId: id }),
-        createdBy,
+        createdBy: user?.id,
       });
       return res.status(constants.HTTP_STATUS_OK).json({ id });
     } catch (error: any) {
@@ -77,7 +70,7 @@ const deleteRole = async (req: Request, res: Response) => {
         status: "FAIL",
         description: "Delete role",
         data: JSON.stringify({ roleId: id, error: error.message }),
-        createdBy,
+        createdBy: user?.id,
       });
       res
         .status(constants.HTTP_STATUS_BAD_REQUEST)
