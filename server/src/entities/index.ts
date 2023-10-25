@@ -8,3 +8,4 @@ export * from "./Role.entity";
 export * from "./Nft.entity";
 export * from "./AuditLog.entity";
 export * from "./PermissionCategory.entity";
+export * from "./Transaction.entity";

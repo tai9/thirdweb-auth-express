@@ -7,6 +7,7 @@ import {
   Nft,
   AuditLog,
   PermissionCategory,
+  Transaction,
 } from "../entities";
 
 const dataSourceOptions: DataSourceOptions = {
@@ -19,7 +20,15 @@ const dataSourceOptions: DataSourceOptions = {
   synchronize: false,
   logging: false,
   ssl: process.env.NODE_ENV === "production",
-  entities: [User, Permission, Role, Nft, AuditLog, PermissionCategory],
+  entities: [
+    User,
+    Permission,
+    Role,
+    Nft,
+    AuditLog,
+    PermissionCategory,
+    Transaction,
+  ],
   extra: {
     connectionLimit: 20,
   },
