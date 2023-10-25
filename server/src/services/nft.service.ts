@@ -1,5 +1,5 @@
 import { AppDataSource } from "../configs/db.config";
-import { Nft } from "../entities";
+import { Nft, Transaction } from "../entities";
 
 const nftRepository = AppDataSource.getRepository(Nft);
 
@@ -14,7 +14,19 @@ const getNfts = async () => {
 
 const createNft = async (nft: Nft) => {
   try {
-    return await nftRepository.save(nft);
+    return await AppDataSource.transaction(
+      async (transactionalEntityManager) => {
+        const nftCreated = await transactionalEntityManager.save(nft);
+        const transaction = new Transaction();
+        transaction.nftId = nftCreated.id;
+        transaction.createdBy = nft.createdBy;
+        transaction.owner = nft.createdBy;
+        transaction.type = "MINT";
+
+        await transactionalEntityManager.save(transaction);
+        return nftCreated;
+      }
+    );
   } catch (err) {
     throw err;
   }

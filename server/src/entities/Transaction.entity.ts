@@ -31,27 +31,31 @@ export class Transaction extends BaseEntity implements ITransaction {
   })
   token: string;
 
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: "owner" })
   @Column({
-    type: "varchar",
+    type: "int",
     nullable: true,
   })
-  owner: string;
+  owner: number;
 
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: "buyer" })
   @Column({
-    type: "varchar",
+    type: "int",
     nullable: true,
   })
-  buyer: string;
+  buyer: number;
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
   @Column({
-    type: "varchar",
+    type: "int",
     nullable: true,
   })
   createdBy: number;
 
-  @OneToMany(() => Nft, (nft) => nft.id)
+  @ManyToOne(() => Nft, (nft) => nft.id)
   @JoinColumn({ name: "nftId" })
   @Column({
     type: "int",

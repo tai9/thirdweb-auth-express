@@ -24,12 +24,13 @@ export const { authRouter, authMiddleware, getUser } = ThirdwebAuth({
       req.session.user = findUser;
       return session;
     },
-    onUser: async (user) => {
+    onUser: async (user, req) => {
       // Here we can run side-effects whenever a user is fetched from the client side
       const userFound = await userService.getUserByAddress(user.address);
       if (!userFound) return null;
       // And we can provide any extra user data to be sent to the client
       // along with the default user object.
+      req.session.user = userFound;
       return userFound.name;
     },
     onLogout: async (user, req) => {

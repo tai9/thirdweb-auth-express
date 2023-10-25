@@ -30,7 +30,7 @@ const createRole = async (req: Request, res: Response) => {
       status: "FAIL",
       description: "Create role",
       data: JSON.stringify(error),
-      createdBy: user.id,
+      createdBy: user?.id,
     });
     res.status(constants.HTTP_STATUS_BAD_REQUEST).json(error);
   }

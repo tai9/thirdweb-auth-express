@@ -75,6 +75,6 @@ export interface ITransaction extends IBaseEntity {
   createdBy: number;
   price?: number;
   token?: string;
-  owner?: string;
-  buyer?: string;
+  owner?: number;
+  buyer?: number;
 }

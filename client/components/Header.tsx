@@ -31,7 +31,7 @@ const Header = () => {
 
       <div>
         <div>{shortenEthereumAddress(user?.address || "")}</div>
-        <div>User ID: {(user?.session as any)["userId"]}</div>
+        <div>User ID: {(user?.session as any)?.["userId"] || "-"}</div>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
-  TableColumn,
   TableForeignKey,
 } from "typeorm";
 
@@ -37,29 +36,41 @@ export class CreateTransactionTable1698220869166 implements MigrationInterface {
           {
             name: "token",
             type: "varchar",
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: "owner",
-            type: "varchar",
-            isNullable: false,
+            type: "int",
+            isNullable: true,
           },
           {
             name: "buyer",
-            type: "varchar",
+            type: "int",
+            isNullable: true,
+          },
+          {
+            name: "nftId",
+            type: "int",
             isNullable: false,
+          },
+          {
+            name: "createdBy",
+            type: "int",
+            isNullable: false,
+          },
+          {
+            name: "createdAt",
+            type: "timestamp",
+            default: "('now'::text)::timestamp(6) with time zone",
+          },
+          {
+            name: "updatedAt",
+            type: "timestamp",
+            default: "('now'::text)::timestamp(6) with time zone",
           },
         ],
       }),
       true
-    );
-
-    await queryRunner.addColumn(
-      "transactions",
-      new TableColumn({
-        name: "createdBy",
-        type: "int",
-      })
     );
 
     await queryRunner.createForeignKey(
@@ -72,11 +83,23 @@ export class CreateTransactionTable1698220869166 implements MigrationInterface {
       })
     );
 
-    await queryRunner.addColumn(
+    await queryRunner.createForeignKey(
       "transactions",
-      new TableColumn({
-        name: "nftId",
-        type: "int",
+      new TableForeignKey({
+        columnNames: ["buyer"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "users",
+        onDelete: "CASCADE",
+      })
+    );
+
+    await queryRunner.createForeignKey(
+      "transactions",
+      new TableForeignKey({
+        columnNames: ["owner"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "users",
+        onDelete: "CASCADE",
       })
     );
 
