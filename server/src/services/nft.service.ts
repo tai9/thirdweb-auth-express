@@ -1,3 +1,4 @@
+import { In, Not } from "typeorm";
 import { AppDataSource } from "../configs/db.config";
 import { Nft, Transaction } from "../entities";
 
@@ -7,6 +8,11 @@ const getNfts = async () => {
   try {
     const [data, count] = await nftRepository.findAndCount({
       relations: ["transactions", "createdBy", "owner"],
+      order: {
+        transactions: {
+          createdAt: "DESC",
+        },
+      },
     });
     return { data, count };
   } catch (err) {

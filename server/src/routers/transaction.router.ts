@@ -8,5 +8,6 @@ const transactionRouters = express.Router();
 // router.use(ensureAuthenticatedUser);
 
 transactionRouters.get("/", transactionController.getTransactions);
+transactionRouters.post("/", transactionController.createTransaction);
 
 export default transactionRouters;

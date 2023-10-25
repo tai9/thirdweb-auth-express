@@ -1,4 +1,5 @@
 import { IBaseEntity } from "./common";
+import { ITransaction } from "./transaction";
 import { IUser } from "./user";
 
 export interface INft extends IBaseEntity {
@@ -7,6 +8,7 @@ export interface INft extends IBaseEntity {
   status: NftStatus;
   owner: IUser;
   createdBy: IUser;
+  transactions?: ITransaction[];
 }
 
 export enum NftStatus {

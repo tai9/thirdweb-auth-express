@@ -67,7 +67,7 @@ export interface IPermisionCategory {
   type: string;
 }
 
-export type TransactionType = "MINT" | "SOLD" | "SALE" | "BURN";
+export type TransactionType = "MINT" | "SOLD" | "SALE" | "BURN" | "CANCELED";
 
 export interface ITransaction extends IBaseEntity {
   txId?: number;

@@ -1,19 +1,35 @@
-import type { NextPage } from "next";
 import {
   useBalance,
   useContract,
-  useContractRead,
   useTransferToken,
   Web3Button,
 } from "@thirdweb-dev/react";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { DataWithPagination } from "../types/common";
-import { INft, NFT_STATUS } from "../types/nft";
+import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { DataWithPagination, TOKEN } from "../types/common";
+import { INft } from "../types/nft";
 import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
+
 const contractAddress = "0x5d5f781C0ffAB3524E414942b80684e3e0445fe4";
 const toAddress = "0x2966bA693DA5343e2a50bdDD174aB89a727C76dd";
 const amount = "9";
+
+import Modal from "react-modal";
+import NftAction from "../components/NftAction";
+import { ITransaction } from "../types/transaction";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
 const NFTsPage: NextPage = () => {
   // Contract must be an ERC-20 contract
   const { contract } = useContract(contractAddress);
@@ -34,6 +50,19 @@ const NFTsPage: NextPage = () => {
   const [form, setForm] = useState<Partial<INft>>({
     name: "",
   });
+
+  const [nftSelected, setNftSelected] = useState<INft>();
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal(nft: INft) {
+    setIsOpen(true);
+    setNftSelected(nft);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     fetchNfts();
@@ -56,6 +85,50 @@ const NFTsPage: NextPage = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const [listingPrice, setListingPrice] = useState(0);
+
+  const handleListNft = async () => {
+    if (!nftSelected || !listingPrice) return;
+    try {
+      await axios.post("/api/transactions", {
+        nftId: nftSelected?.id,
+        price: listingPrice,
+        token: TOKEN.ADP,
+      });
+      await fetchNfts();
+      closeModal();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleCancelSale = async (nft: INft) => {
+    try {
+      await axios.post("/api/transactions", {
+        nftId: nft.id,
+        type: "CANCELED",
+      });
+      await fetchNfts();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleBuy = async () => {
+    // if (!nftSelected || !listingPrice) return;
+    // await axios.post("/api/transactions", {
+    //   nftId: nftSelected?.id,
+    //   price: listingPrice,
+    // });
+    console.log("handleBuy");
+  };
+
+  const renderNftStatus = (transactions?: ITransaction[]) => {
+    if (!transactions?.length) return "";
+    const tx = transactions[0];
+    return tx.type;
   };
 
   return (
@@ -89,7 +162,14 @@ const NFTsPage: NextPage = () => {
                 shortenEthereumAddress(item.createdBy.walletAddress) ||
                 "admin"}
             </i>
-            <b>{NFT_STATUS[item.status]}</b>
+            <b>{renderNftStatus(item.transactions)}</b>
+
+            <NftAction
+              nft={item}
+              handleListing={openModal}
+              handleBuy={handleBuy}
+              handleCancel={handleCancelSale}
+            />
           </div>
         ))}
       </div>
@@ -113,6 +193,23 @@ const NFTsPage: NextPage = () => {
           <button type="submit">Submit</button>
         </div>
       </form>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <div className="flex-col">
+          <div>List NFT: {nftSelected?.name}</div>
+          <div className="flex-row">
+            <input onChange={(e) => setListingPrice(+e.target.value)} />
+            <select name="" id="">
+              <option value={TOKEN.ADP}>{TOKEN.ADP}</option>
+            </select>
+            <button onClick={handleListNft}>List</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
