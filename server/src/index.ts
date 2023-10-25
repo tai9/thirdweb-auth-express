@@ -12,6 +12,7 @@ import RedisStore from "connect-redis";
 import sessions from "express-session";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import nftRouters from "./routers/nft.router";
+import transactionRouters from "./routers/transaction.router";
 
 config();
 
@@ -108,6 +109,7 @@ app.use("/permissions", permissionRouters);
 app.use("/roles", roleRouters);
 app.use("/audit-logs", auditLogRouters);
 app.use("/nfts", nftRouters);
+app.use("/transactions", transactionRouters);
 
 // connect DB
 getDbConnection();

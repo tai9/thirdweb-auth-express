@@ -15,6 +15,10 @@ const Header = () => {
         <button>NFTs</button>
       </Link>
 
+      <Link href={"/transactions"}>
+        <button>Transactions</button>
+      </Link>
+
       <Link href={"/audit-logs"}>
         <button>Audit logs</button>
       </Link>
