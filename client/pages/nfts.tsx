@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { DataWithPagination } from "../types/common";
 import { INft, NFT_STATUS } from "../types/nft";
+import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 const contractAddress = "0x5d5f781C0ffAB3524E414942b80684e3e0445fe4";
 const toAddress = "0x2966bA693DA5343e2a50bdDD174aB89a727C76dd";
 const amount = "9";
@@ -82,7 +83,12 @@ const NFTsPage: NextPage = () => {
               height={200}
             />
             <div>{item.name}</div>
-            <i>Owned by: {item.createdBy || "admin"}</i>
+            <i>
+              Owned by:{" "}
+              {item.createdBy.name ||
+                shortenEthereumAddress(item.createdBy.walletAddress) ||
+                "admin"}
+            </i>
             <b>{NFT_STATUS[item.status]}</b>
           </div>
         ))}

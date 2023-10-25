@@ -37,7 +37,7 @@ export class Transaction extends BaseEntity implements ITransaction {
     type: "int",
     nullable: true,
   })
-  owner: number;
+  owner: User;
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: "buyer" })
@@ -45,7 +45,7 @@ export class Transaction extends BaseEntity implements ITransaction {
     type: "int",
     nullable: true,
   })
-  buyer: number;
+  buyer: User;
 
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: "createdBy" })
@@ -53,7 +53,7 @@ export class Transaction extends BaseEntity implements ITransaction {
     type: "int",
     nullable: true,
   })
-  createdBy: number;
+  createdBy: User;
 
   @ManyToOne(() => Nft, (nft) => nft.id)
   @JoinColumn({ name: "nftId" })
@@ -62,4 +62,7 @@ export class Transaction extends BaseEntity implements ITransaction {
     nullable: true,
   })
   nftId: number;
+
+  @ManyToOne(() => Nft, (nft) => nft.transactions)
+  nft: Nft;
 }

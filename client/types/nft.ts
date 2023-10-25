@@ -1,11 +1,12 @@
 import { IBaseEntity } from "./common";
+import { IUser } from "./user";
 
 export interface INft extends IBaseEntity {
   name: string;
   description?: string;
   status: NftStatus;
-  owner: number;
-  createdBy: number;
+  owner: IUser;
+  createdBy: IUser;
 }
 
 export enum NftStatus {

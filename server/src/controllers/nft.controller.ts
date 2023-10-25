@@ -11,8 +11,8 @@ const createNft = async (req: Request, res: Response) => {
     nft.name = req.body.name;
     nft.description = req.body.description;
     nft.status = req.body.status;
-    nft.owner = user?.id;
-    nft.createdBy = user?.id;
+    nft.owner = user;
+    nft.createdBy = user;
     nft.status = NftStatus.NOT_ON_SALE;
 
     const nftCreated = await nftService.createNft(nft);

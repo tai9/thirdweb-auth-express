@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
-import { BaseEntity, INft, NftStatus, User } from ".";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { BaseEntity, INft, NftStatus, Transaction, User } from ".";
 
 @Entity({
   name: "nfts",
@@ -32,7 +32,7 @@ export class Nft extends BaseEntity implements INft {
   @JoinColumn({
     name: "owner",
   })
-  owner: number;
+  owner: User;
 
   @Column({
     type: "int",
@@ -42,5 +42,8 @@ export class Nft extends BaseEntity implements INft {
   @JoinColumn({
     name: "createdBy",
   })
-  createdBy: number;
+  createdBy: User;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.nft)
+  transactions: Transaction[];
 }

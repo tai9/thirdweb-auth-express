@@ -38,8 +38,9 @@ export interface INft extends IBaseEntity {
   name: string;
   description?: string;
   status: NftStatus;
-  owner: number;
-  createdBy: number;
+  owner: IUser;
+  createdBy: IUser;
+  transactions?: ITransaction[];
 }
 
 export type AuditType =
@@ -72,9 +73,10 @@ export interface ITransaction extends IBaseEntity {
   txId?: number;
   nftId?: number;
   type: TransactionType;
-  createdBy: number;
+  createdBy: IUser;
   price?: number;
   token?: string;
-  owner?: number;
-  buyer?: number;
+  owner?: IUser;
+  buyer?: IUser;
+  nft?: INft;
 }
