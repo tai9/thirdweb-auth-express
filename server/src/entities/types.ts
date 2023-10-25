@@ -28,12 +28,18 @@ export interface IRole extends IBaseEntity {
   permissionIds: number[];
 }
 
+export enum NftStatus {
+  "NOT_ON_SALE" = 1,
+  "LISTED",
+  "BURNED",
+}
+
 export interface INft extends IBaseEntity {
   name: string;
   description?: string;
-  status: boolean;
-  owner: IUser;
-  createdBy: IUser;
+  status: NftStatus;
+  owner: number;
+  createdBy: number;
 }
 
 export type AuditType =

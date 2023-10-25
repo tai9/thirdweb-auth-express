@@ -10,6 +10,8 @@ import auditLogRouters from "./routers/auditLog.router";
 import Redis from "ioredis";
 import RedisStore from "connect-redis";
 import sessions from "express-session";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import nftRouters from "./routers/nft.router";
 
 config();
 
@@ -51,6 +53,33 @@ app.use("/ping", (req, res) => {
   res.send("ok");
 });
 
+// If used on the BACKEND pass your 'secretKey'
+const sdk = new ThirdwebSDK("goerli", {
+  secretKey: process.env.THIRDWEB_AUTH_SECRET_KEY,
+});
+
+app.use("/get-contracts", async (req, res) => {
+  try {
+    const contract = await sdk.getContract(
+      "0x5d5f781C0ffAB3524E414942b80684e3e0445fe4"
+    );
+    const data = await contract.metadata.get();
+    console.log(data);
+
+    // const data = await contract.call("balanceOf", [
+    //   "0x2966bA693DA5343e2a50bdDD174aB89a727C76dd",
+    // ]);
+    // const s = new BigNumber(data._hex);
+    // console.log(s.toNumber(), data);
+
+    return res.send("ok");
+  } catch (error) {
+    console.log(error);
+
+    res.send("fail");
+  }
+});
+
 app.get("/get-session", (req, res) => {
   return res.status(200).json({
     status: "ok",
@@ -78,6 +107,7 @@ app.use("/users", userRouters);
 app.use("/permissions", permissionRouters);
 app.use("/roles", roleRouters);
 app.use("/audit-logs", auditLogRouters);
+app.use("/nfts", nftRouters);
 
 // connect DB
 getDbConnection();

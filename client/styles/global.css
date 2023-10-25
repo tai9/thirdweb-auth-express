@@ -15,6 +15,7 @@ body {
   display: flex;
   gap: 24px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .flex-col {
@@ -43,4 +44,13 @@ tr:nth-child(even) {
 hr {
   margin: 32px 0;
   border-top-color: plum;
+}
+
+.nft-card {
+  border: 1px solid rgb(132, 132, 226);
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }

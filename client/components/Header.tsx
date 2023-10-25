@@ -1,7 +1,10 @@
+import { useUser } from "@thirdweb-dev/react";
 import Link from "next/link";
 import React from "react";
+import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
 const Header = () => {
+  const { user } = useUser();
   return (
     <div className="flex-row header">
       <Link href={"/"}>
@@ -25,6 +28,11 @@ const Header = () => {
       <Link href={"/permissions"}>
         <button>Permissions</button>
       </Link>
+
+      <div>
+        <div>{shortenEthereumAddress(user?.address || "")}</div>
+        <div>User ID: {(user?.session as any)["userId"]}</div>
+      </div>
     </div>
   );
 };

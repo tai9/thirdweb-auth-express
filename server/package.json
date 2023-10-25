@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@thirdweb-dev/auth": "^3.0.0",
+    "bignumber.js": "^9.1.2",
     "connect-redis": "^7.1.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
