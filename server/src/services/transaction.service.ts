@@ -6,7 +6,7 @@ const transactionRepository = AppDataSource.getRepository(Transaction);
 const getTransactions = async () => {
   try {
     const [data, count] = await transactionRepository.findAndCount({
-      relations: ["nft"],
+      relations: ["nft", "createdBy", "owner", "buyer"],
     });
     return { data, count };
   } catch (err) {

@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { DataWithPagination } from "../types/common";
 import { ITransaction } from "../types/transaction";
+import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
 const TransactionsPage: NextPage = () => {
   const [transactions, setTransactions] = useState<
@@ -53,13 +54,20 @@ const TransactionsPage: NextPage = () => {
                 >
                   {item.txId}
                 </td>
-                <td>{item.nftId || "-"}</td>
+                <td>{item.nft.name || "-"}</td>
                 <td>{item.type}</td>
                 <td>{item.price || "-"}</td>
                 <td>{item.token || "-"}</td>
-                <td>{item.owner || "-"}</td>
-                <td>{item.buyer || "-"}</td>
-                <td>{item.createdBy || "-"}</td>
+                <td>
+                  {shortenEthereumAddress(item.owner?.walletAddress || "") ||
+                    "-"}
+                </td>
+                <td>
+                  {shortenEthereumAddress(item.buyer?.walletAddress || "-")}
+                </td>
+                <td>
+                  {shortenEthereumAddress(item.createdBy.walletAddress || "-")}
+                </td>
               </tr>
             ))}
           </table>
