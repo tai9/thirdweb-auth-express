@@ -41,6 +41,7 @@ export interface INft extends IBaseEntity {
   owner: IUser;
   createdBy: IUser;
   transactions?: ITransaction[];
+  lastTransaction?: ITransaction;
 }
 
 export type AuditType =

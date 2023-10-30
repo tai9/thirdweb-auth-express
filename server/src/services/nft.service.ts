@@ -7,14 +7,23 @@ const nftRepository = AppDataSource.getRepository(Nft);
 const getNfts = async () => {
   try {
     const [data, count] = await nftRepository.findAndCount({
-      relations: ["transactions", "createdBy", "owner"],
+      relations: [
+        "transactions",
+        "transactions.createdBy",
+        "createdBy",
+        "owner",
+      ],
       order: {
         transactions: {
           createdAt: "DESC",
         },
       },
     });
-    return { data, count };
+    const dataMapped = data.map((x) => ({
+      ...x,
+      lastTransaction: x.transactions?.[0],
+    }));
+    return { data: dataMapped, count };
   } catch (err) {
     throw err;
   }

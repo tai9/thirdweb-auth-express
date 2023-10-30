@@ -1,10 +1,13 @@
-import { useUser } from "@thirdweb-dev/react";
+import { useBalance, useUser } from "@thirdweb-dev/react";
 import Link from "next/link";
 import React from "react";
 import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
 const Header = () => {
   const { user } = useUser();
+
+  const { data } = useBalance("0x5d5f781C0ffAB3524E414942b80684e3e0445fe4");
+
   return (
     <div className="flex-row header">
       <Link href={"/"}>
@@ -36,6 +39,14 @@ const Header = () => {
       <div>
         <div>{shortenEthereumAddress(user?.address || "")}</div>
         <div>User ID: {(user?.session as any)?.["userId"] || "-"}</div>
+        <div
+          style={{
+            fontWeight: 600,
+            color: "purple",
+          }}
+        >
+          Balance: {data?.displayValue} {data?.symbol}
+        </div>
       </div>
     </div>
   );
