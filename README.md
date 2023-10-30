@@ -6,6 +6,10 @@
 - Proxy
 - TypeORM + Postgresql
 
+## DB Diagram
+![Auth dApp](https://github.com/tai9/thirdweb-auth-express/assets/62343057/ba8ce356-5662-48cc-b33a-722f57a83600)
+
+
 ## Getting Started
 
 This example demonstrates how to use thirdweb Auth with an express backend and react frontend.
